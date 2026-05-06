@@ -230,18 +230,48 @@ export default function Creator() {
   const restoreHistory = (item: HistoryItem) => setConfig(item.config);
   const clearHistory = () => { setHistory([]); writeLS("sc-history", []); };
 
+  /* Filename builder */
+  const buildFilename = () => {
+    const slug = config.contactName.trim().replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_]/g, "") || "contact";
+    const callVariants: Record<string, string[]> = {
+      incoming: ["incoming_call", "received_call", "call_received", "inbound_call"],
+      outgoing: ["outgoing_call", "dialed_call", "call_made", "placed_call"],
+      missed:   ["missed_call", "call_missed", "unanswered_call", "no_answer"],
+    };
+    const variants = callVariants[config.callType] ?? ["call"];
+    const suffix = variants[Math.floor(Math.random() * variants.length)];
+    return `${slug}_${suffix}.png`;
+  };
+
   /* Download */
+  const [copying, setCopying] = useState(false);
+  const [copyDone, setCopyDone] = useState(false);
+
   const handleDownload = async () => {
     if (!phoneRef.current) return;
     setDownloading(true);
     try {
       const dataUrl = await toPng(phoneRef.current, { cacheBust: true, pixelRatio: 3, style: { borderRadius: "0" } });
       const link = document.createElement("a");
-      link.download = `${config.template}-call-screenshot.png`;
+      link.download = buildFilename();
       link.href = dataUrl;
       link.click();
     } catch (err) { console.error("Download failed", err); }
     finally { setDownloading(false); }
+  };
+
+  const handleCopy = async () => {
+    if (!phoneRef.current) return;
+    setCopying(true);
+    try {
+      const dataUrl = await toPng(phoneRef.current, { cacheBust: true, pixelRatio: 3, style: { borderRadius: "0" } });
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      setCopyDone(true);
+      setTimeout(() => setCopyDone(false), 2000);
+    } catch (err) { console.error("Copy failed", err); }
+    finally { setCopying(false); }
   };
 
   const livePreviewTime = COUNTRY_TIMEZONE[selectedCountry] ? getCountryTime(selectedCountry) : "--:--";
@@ -254,10 +284,23 @@ export default function Creator() {
           <h1 className="text-xl font-bold text-foreground tracking-tight">Phone Screenshot Creator</h1>
           <p className="text-xs text-muted-foreground mt-0.5">Customize and download realistic phone call screenshots</p>
         </div>
-        <button onClick={handleDownload} disabled={downloading}
-          className="flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 shadow-md">
-          {downloading ? <><span className="animate-spin inline-block">⏳</span> Saving...</> : <><span>⬇</span> Download PNG</>}
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={handleCopy} disabled={copying || copyDone}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 shadow-sm border
+              ${copyDone
+                ? "bg-green-500 text-white border-green-500"
+                : "bg-card text-foreground border-border hover:bg-muted/60 disabled:opacity-60"}`}>
+            {copying
+              ? <><span className="animate-spin inline-block text-base">⏳</span> Copying…</>
+              : copyDone
+                ? <><span>✓</span> Copied!</>
+                : <><span>📋</span> Copy</>}
+          </button>
+          <button onClick={handleDownload} disabled={downloading}
+            className="flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 shadow-md">
+            {downloading ? <><span className="animate-spin inline-block">⏳</span> Saving…</> : <><span>⬇</span> Download PNG</>}
+          </button>
+        </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
