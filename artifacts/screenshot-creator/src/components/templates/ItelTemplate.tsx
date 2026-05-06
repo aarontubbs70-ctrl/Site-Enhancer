@@ -1,4 +1,5 @@
 import { ScreenshotConfig } from "@/types/screenshot";
+import { NotifIcon } from "@/components/icons/NotifIcons";
 import {
   AndroidSignal, AndroidWifi, AndroidBattery,
   AndroidPhone, AndroidMessage, AndroidVideo,
@@ -40,13 +41,9 @@ export function ItelTemplate({ config }: Props) {
         {/* Left: time + notification icons */}
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{ fontSize: 14, fontWeight: 600, color: "#111", fontVariantNumeric: "tabular-nums" }}>{config.time}</span>
-          {/* WhatsApp */}
-          <svg width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#25D366"/><path d="M17.5 14.4c-.3-.15-1.7-.85-2-.95-.3-.1-.5-.15-.7.1-.2.25-.8 1-.95 1.2-.15.15-.3.2-.6.05-.3-.15-1.2-.45-2.3-1.4-.85-.75-1.4-1.65-1.6-1.95-.15-.3 0-.5.15-.6.1-.1.3-.3.4-.5.1-.15.15-.3.2-.5 0-.2-.65-1.65-.9-2.3-.25-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.7s1.15 3.15 1.3 3.35c.2.2 2.25 3.65 5.5 4.95 3.25 1.3 3.25.9 3.85.85.6-.05 1.9-.75 2.15-1.5.25-.75.25-1.4.2-1.55l-.5-.25z" fill="white"/></svg>
-          {/* Pokémon-Go style P */}
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#e74c3c" }}>P</span>
-          {/* TikTok music note */}
-          <svg width="11" height="13" viewBox="0 0 11 13"><path d="M8 0v8.5a2.5 2.5 0 1 1-1.5-2.3V4.5A5.5 5.5 0 0 0 2 10a5 5 0 1 0 7.5-4.3V0H8z" fill="#111"/></svg>
-          <span style={{ fontSize: 12, color: "#999" }}>•</span>
+          {(config.notifIcons ?? ["whatsapp", "tiktok"]).map((id, i) => (
+            <NotifIcon key={i} id={id} size={13} color="#555" />
+          ))}
         </div>
         {/* Right: wifi, network, signal, battery */}
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>

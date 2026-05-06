@@ -6,6 +6,7 @@ import {
   AndroidMissedCall, AndroidMic, AndroidStar, AndroidPencil,
   AndroidShare, AndroidMoreVert,
 } from "@/components/icons/AndroidIcons";
+import { NotifIcon } from "@/components/icons/NotifIcons";
 
 interface Props { config: ScreenshotConfig }
 
@@ -63,10 +64,9 @@ export function SamsungTemplate({ config }: Props) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px 0", height: 50 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{ fontSize: 14, fontWeight: 600, color: "#111", fontVariantNumeric: "tabular-nums" }}>{config.time}</span>
-          {/* Notification icons */}
-          <svg width="12" height="14" viewBox="0 0 12 14"><path d="M6 1a4 4 0 0 0-4 4v4l-1.5 1.5v.5h11v-.5L10 9V5A4 4 0 0 0 6 1zm0 13a2 2 0 0 0 2-2H4a2 2 0 0 0 2 2z" fill="#555"/></svg>
-          <svg width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#25D366"/><path d="M17.5 14.4c-.3-.15-1.7-.85-2-.95-.3-.1-.5-.15-.7.1-.2.25-.8 1-.95 1.2-.15.15-.3.2-.6.05-.3-.15-1.2-.45-2.3-1.4-.85-.75-1.4-1.65-1.6-1.95-.15-.3 0-.5.15-.6.1-.1.3-.3.4-.5.1-.15.15-.3.2-.5 0-.2-.65-1.65-.9-2.3-.25-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.7s1.15 3.15 1.3 3.35c.2.2 2.25 3.65 5.5 4.95 3.25 1.3 3.25.9 3.85.85.6-.05 1.9-.75 2.15-1.5.25-.75.25-1.4.2-1.55l-.5-.25z" fill="white"/></svg>
-          <span style={{ fontSize: 12, color: "#888" }}>•</span>
+          {(config.notifIcons ?? ["whatsapp", "tiktok"]).map((id, i) => (
+            <NotifIcon key={i} id={id} size={13} color="#555" />
+          ))}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <AndroidWifi strength={config.wifiConnected ? config.wifiStrength : 0} color="#444" />

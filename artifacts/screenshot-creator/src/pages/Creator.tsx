@@ -5,8 +5,9 @@ import { IPhoneDarkTemplate }  from "@/components/templates/IPhoneDarkTemplate";
 import { ItelTemplate }        from "@/components/templates/ItelTemplate";
 import { SamsungTemplate }     from "@/components/templates/SamsungTemplate";
 import { SamsungDarkTemplate } from "@/components/templates/SamsungDarkTemplate";
-import { ScreenshotConfig, PhoneTemplate, CallType, NetworkType, Preset, HistoryItem } from "@/types/screenshot";
+import { ScreenshotConfig, PhoneTemplate, CallType, NetworkType, Preset, HistoryItem, NotifIconId } from "@/types/screenshot";
 import { Country, generateContact, getCountryTime, COUNTRY_TIMEZONE, validateName, validatePhone } from "@/lib/contacts";
+import { pickRandomNotifIcons } from "@/components/icons/NotifIcons";
 
 const AVATAR_COLORS = [
   "#FF6B6B","#FF8E53","#FFC107","#4CAF50","#2196F3",
@@ -43,6 +44,7 @@ const defaultConfig: ScreenshotConfig = {
   yesterdayCall2Type: "missed",
   showOlderDate: true,
   olderDateLabel: "Sunday, 26 April",
+  notifIcons: ["whatsapp", "tiktok"] as NotifIconId[],
 };
 
 /* ─── localStorage helpers ─── */
@@ -198,8 +200,10 @@ export default function Creator() {
       const offsetMins = [1, 2, 3, 5][Math.floor(Math.random() * 4)];
       const callTime = subtractMinutes(now, offsetMins);
       const newColor = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+      const notifCount = 2 + Math.floor(Math.random() * 2);
+      const notifIcons = pickRandomNotifIcons(notifCount);
       setConfig(p => {
-        const next = { ...p, contactName: contact.name, phoneNumber: contact.phone, avatarInitials: "", avatarColor: newColor, time: now, callTime, callDate: "Today" };
+        const next = { ...p, contactName: contact.name, phoneNumber: contact.phone, avatarInitials: "", avatarColor: newColor, time: now, callTime, callDate: "Today", notifIcons };
         /* push to history */
         const item: HistoryItem = { id: Date.now().toString(), contactName: contact.name, phoneNumber: contact.phone, avatarColor: newColor, config: next, generatedAt: Date.now() };
         setHistory(prev => {

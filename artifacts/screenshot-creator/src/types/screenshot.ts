@@ -1,6 +1,7 @@
 export type PhoneTemplate = "iphone" | "iphone-dark" | "samsung" | "samsung-dark" | "itel";
 export type CallType = "incoming" | "outgoing" | "missed";
 export type NetworkType = "5G" | "LTE" | "4G" | "3G" | "H+" | "E";
+export type NotifIconId = "whatsapp" | "tiktok" | "instagram" | "facebook" | "twitter" | "gmail" | "snapchat" | "telegram" | "youtube" | "spotify" | "netflix" | "chrome" | "bell" | "message";
 
 export interface ScreenshotConfig {
   template: PhoneTemplate;
@@ -31,6 +32,7 @@ export interface ScreenshotConfig {
   yesterdayCall2Type: CallType;
   showOlderDate: boolean;
   olderDateLabel: string;
+  notifIcons: NotifIconId[];
 }
 
 export interface Preset {
