@@ -36,6 +36,11 @@ const defaultConfig: ScreenshotConfig = {
   secondCallTime: "2:39 pm",
   secondCallDuration: "1 min 22 secs",
   secondCallType: "incoming",
+  showYesterday: true,
+  yesterdayCall1Time: "8:08 pm",
+  yesterdayCall1Type: "missed",
+  yesterdayCall2Time: "8:06 pm",
+  yesterdayCall2Type: "missed",
 };
 
 /* ─── localStorage helpers ─── */
@@ -474,6 +479,21 @@ export default function Creator() {
                 <div><Label>Second Call Type</Label><Select value={config.secondCallType} onChange={v => update("secondCallType", v as CallType)} options={CALL_TYPES} /></div>
                 <div><Label>Second Call Time</Label><PlainInput value={config.secondCallTime} onChange={v => update("secondCallTime", v)} placeholder="2:39 pm" /></div>
                 <div><Label>Second Call Duration</Label><PlainInput value={config.secondCallDuration} onChange={v => update("secondCallDuration", v)} placeholder="1 min 22 secs" /></div>
+              </>)}
+            </Section>
+          )}
+
+          {/* ── Yesterday Section (Samsung) ── */}
+          {(config.template === "samsung" || config.template === "samsung-dark") && (
+            <Section title="Yesterday Section">
+              <Toggle checked={config.showYesterday} onChange={v => update("showYesterday", v)} label="Show Yesterday calls" />
+              {config.showYesterday && (<>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">Call 1</div>
+                <div><Label>Call Type</Label><Select value={config.yesterdayCall1Type} onChange={v => update("yesterdayCall1Type", v as CallType)} options={CALL_TYPES} /></div>
+                <div><Label>Time</Label><PlainInput value={config.yesterdayCall1Time} onChange={v => update("yesterdayCall1Time", v)} placeholder="8:08 pm" /></div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">Call 2</div>
+                <div><Label>Call Type</Label><Select value={config.yesterdayCall2Type} onChange={v => update("yesterdayCall2Type", v as CallType)} options={CALL_TYPES} /></div>
+                <div><Label>Time</Label><PlainInput value={config.yesterdayCall2Time} onChange={v => update("yesterdayCall2Time", v)} placeholder="8:06 pm" /></div>
               </>)}
             </Section>
           )}

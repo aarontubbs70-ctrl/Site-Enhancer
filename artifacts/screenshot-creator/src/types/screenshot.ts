@@ -24,6 +24,11 @@ export interface ScreenshotConfig {
   secondCallTime: string;
   secondCallDuration: string;
   secondCallType: CallType;
+  showYesterday: boolean;
+  yesterdayCall1Time: string;
+  yesterdayCall1Type: CallType;
+  yesterdayCall2Time: string;
+  yesterdayCall2Type: CallType;
 }
 
 export interface Preset {

@@ -155,15 +155,13 @@ export function SamsungTemplate({ config }: Props) {
           <CallRow key={i} entry={entry} last={false} />
         ))}
 
-        <div style={{ padding: "12px 0 8px", borderTop: "1px solid #f2f2f2" }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#777", letterSpacing: 0.3 }}>Yesterday</span>
-        </div>
-        <CallRow entry={{ time: "8:08 pm", duration: "", type: "missed" }} last={false} />
-        <CallRow entry={{ time: "8:06 pm", duration: "", type: "missed" }} last={true} />
-
-        <div style={{ padding: "12px 0 8px", borderTop: "1px solid #f2f2f2" }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#777", letterSpacing: 0.3 }}>Sunday, 26 April</span>
-        </div>
+        {config.showYesterday && (<>
+          <div style={{ padding: "12px 0 8px", borderTop: "1px solid #f2f2f2" }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: "#777", letterSpacing: 0.3 }}>Yesterday</span>
+          </div>
+          <CallRow entry={{ time: config.yesterdayCall1Time, duration: "", type: config.yesterdayCall1Type }} last={false} />
+          <CallRow entry={{ time: config.yesterdayCall2Time, duration: "", type: config.yesterdayCall2Type }} last={true} />
+        </>)}
       </div>
 
       {/* Bottom Nav — Samsung 4-item bar */}
