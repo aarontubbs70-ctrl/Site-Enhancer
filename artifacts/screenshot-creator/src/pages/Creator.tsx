@@ -311,6 +311,17 @@ export default function Creator() {
           {/* ── Auto-Generate ── */}
           <Section title="Auto-Generate Contact" accent="text-emerald-600">
             <p className="text-xs text-muted-foreground">Pick a country to get a realistic name, number, and <strong>real local time</strong>.</p>
+            <div>
+              <Label>Call Duration</Label>
+              <input
+                type="text"
+                value={config.callDuration}
+                onChange={e => update("callDuration", e.target.value)}
+                placeholder="e.g. 2 mins 14 secs"
+                className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-400/50 transition"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1">This duration will appear on the generated screenshot.</p>
+            </div>
             <div className="grid grid-cols-5 gap-1">
               {COUNTRIES.map(c => (
                 <button key={c.value} onClick={() => setSelectedCountry(c.value)}
