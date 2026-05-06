@@ -131,6 +131,13 @@ const CALL_TYPES: { label: string; value: CallType }[] = [
   { label: "Missed Call",   value: "missed"   },
 ];
 
+/* ─── Time helper ─── */
+function subtractMinutes(time: string, mins: number): string {
+  const [h, m] = time.split(":").map(Number);
+  const total = ((h * 60 + m - mins) % 1440 + 1440) % 1440;
+  return `${Math.floor(total / 60).toString().padStart(2, "0")}:${(total % 60).toString().padStart(2, "0")}`;
+}
+
 /* ─── Main component ─── */
 export default function Creator() {
   const [config, setConfig]               = useState<ScreenshotConfig>(defaultConfig);
@@ -172,9 +179,11 @@ export default function Creator() {
     setTimeout(() => {
       const contact = generateContact(c);
       const now = getCountryTime(c);
+      const offsetMins = [1, 2, 3, 5][Math.floor(Math.random() * 4)];
+      const callTime = subtractMinutes(now, offsetMins);
       const newColor = AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
       setConfig(p => {
-        const next = { ...p, contactName: contact.name, phoneNumber: contact.phone, avatarInitials: "", avatarColor: newColor, time: now };
+        const next = { ...p, contactName: contact.name, phoneNumber: contact.phone, avatarInitials: "", avatarColor: newColor, time: now, callTime, callDate: "Today" };
         /* push to history */
         const item: HistoryItem = { id: Date.now().toString(), contactName: contact.name, phoneNumber: contact.phone, avatarColor: newColor, config: next, generatedAt: Date.now() };
         setHistory(prev => {
