@@ -148,8 +148,13 @@ export function SamsungDarkTemplate({ config }: Props) {
             <span style={{ fontSize: 12, fontWeight: 600, color: DIM, letterSpacing: 0.3 }}>Yesterday</span>
           </div>
           <CallRow entry={{ time: config.yesterdayCall1Time, duration: "", type: config.yesterdayCall1Type }} last={false} />
-          <CallRow entry={{ time: config.yesterdayCall2Time, duration: "", type: config.yesterdayCall2Type }} last={true} />
+          <CallRow entry={{ time: config.yesterdayCall2Time, duration: "", type: config.yesterdayCall2Type }} last={!config.showOlderDate} />
         </>)}
+        {config.showOlderDate && (
+          <div style={{ padding: "12px 0 8px", borderTop: `1px solid ${DIV}` }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: DIM, letterSpacing: 0.3 }}>{config.olderDateLabel}</span>
+          </div>
+        )}
       </div>
 
       {/* Bottom Nav */}

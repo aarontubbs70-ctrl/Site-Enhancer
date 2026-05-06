@@ -145,14 +145,16 @@ export function ItelTemplate({ config }: Props) {
             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
               <AndroidPhone color="#bbb" size={11} />
               <span style={{ color: "#bbb", backgroundColor: "#f0f0f0", padding: "1px 5px", borderRadius: 3, fontSize: 10, fontWeight: 700 }}>HD</span>
-              <span style={{ fontSize: 12, color: "#bbb" }}>{config.callTime}</span>
               <span style={{ fontSize: 12, color: config.callType === "missed" ? "#e53935" : "#bbb" }}>
                 {config.callType === "missed" ? "Not connected" : config.callDuration}
               </span>
             </div>
           </div>
         </div>
-        <span style={{ fontSize: 13, color: "#bbb" }}>{config.callDate}</span>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 13, color: "#bbb", fontVariantNumeric: "tabular-nums" }}>{config.callTime}</div>
+          <div style={{ fontSize: 11, color: "#ccc", marginTop: 2 }}>{config.callDate}</div>
+        </div>
       </div>
 
       {/* Bottom Nav — Android 3-button */}

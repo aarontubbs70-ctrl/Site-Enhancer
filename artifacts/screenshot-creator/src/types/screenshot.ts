@@ -29,6 +29,8 @@ export interface ScreenshotConfig {
   yesterdayCall1Type: CallType;
   yesterdayCall2Time: string;
   yesterdayCall2Type: CallType;
+  showOlderDate: boolean;
+  olderDateLabel: string;
 }
 
 export interface Preset {

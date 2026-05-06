@@ -41,6 +41,8 @@ const defaultConfig: ScreenshotConfig = {
   yesterdayCall1Type: "missed",
   yesterdayCall2Time: "8:06 pm",
   yesterdayCall2Type: "missed",
+  showOlderDate: true,
+  olderDateLabel: "Sunday, 26 April",
 };
 
 /* ─── localStorage helpers ─── */
@@ -240,7 +242,9 @@ export default function Creator() {
     };
     const variants = callVariants[config.callType] ?? ["call"];
     const suffix = variants[Math.floor(Math.random() * variants.length)];
-    return `${slug}_${suffix}.png`;
+    const now = new Date();
+    const ts = `${now.getHours().toString().padStart(2,"0")}${now.getMinutes().toString().padStart(2,"0")}`;
+    return `${slug}_${suffix}_${ts}.png`;
   };
 
   /* Download */
@@ -538,6 +542,11 @@ export default function Creator() {
                 <div><Label>Call Type</Label><Select value={config.yesterdayCall2Type} onChange={v => update("yesterdayCall2Type", v as CallType)} options={CALL_TYPES} /></div>
                 <div><Label>Time</Label><PlainInput value={config.yesterdayCall2Time} onChange={v => update("yesterdayCall2Time", v)} placeholder="8:06 pm" /></div>
               </>)}
+              <div className="h-px bg-border my-1" />
+              <Toggle checked={config.showOlderDate} onChange={v => update("showOlderDate", v)} label="Show older date row" />
+              {config.showOlderDate && (
+                <div><Label>Older Date Label</Label><PlainInput value={config.olderDateLabel} onChange={v => update("olderDateLabel", v)} placeholder="Sunday, 26 April" /></div>
+              )}
             </Section>
           )}
 
