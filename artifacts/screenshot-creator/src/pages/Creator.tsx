@@ -131,6 +131,13 @@ const CALL_TYPES: { label: string; value: CallType }[] = [
   { label: "Missed Call",   value: "missed"   },
 ];
 
+/* ─── Duration formatter ─── */
+function formatDuration(mins: number, secs: number): string {
+  if (mins === 0) return `${secs} secs`;
+  if (secs === 0) return `${mins} min${mins !== 1 ? "s" : ""}`;
+  return `${mins} min${mins !== 1 ? "s" : ""} ${secs} secs`;
+}
+
 /* ─── Time helper ─── */
 function subtractMinutes(time: string, mins: number): string {
   const [h, m] = time.split(":").map(Number);
@@ -149,6 +156,8 @@ export default function Creator() {
   const [history, setHistory]             = useState<HistoryItem[]>(() => readLS("sc-history", []));
   const [presetNameInput, setPresetNameInput] = useState("");
   const [showSavePreset, setShowSavePreset]   = useState(false);
+  const [durationMins, setDurationMins]       = useState(0);
+  const [durationSecs, setDurationSecs]       = useState(14);
   const phoneRef = useRef<HTMLDivElement>(null);
   const liveRef  = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -313,14 +322,36 @@ export default function Creator() {
             <p className="text-xs text-muted-foreground">Pick a country to get a realistic name, number, and <strong>real local time</strong>.</p>
             <div>
               <Label>Call Duration</Label>
-              <input
-                type="text"
-                value={config.callDuration}
-                onChange={e => update("callDuration", e.target.value)}
-                placeholder="e.g. 2 mins 14 secs"
-                className="w-full px-3 py-2 text-sm border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-400/50 transition"
-              />
-              <p className="text-[11px] text-muted-foreground mt-1">This duration will appear on the generated screenshot.</p>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 flex flex-col items-center gap-1">
+                  <div className="flex items-center w-full border border-border rounded-lg overflow-hidden bg-background">
+                    <button
+                      onClick={() => { const v = Math.max(0, durationMins - 1); setDurationMins(v); update("callDuration", formatDuration(v, durationSecs)); }}
+                      className="px-2.5 py-2 text-muted-foreground hover:bg-muted/60 transition text-base font-bold select-none">−</button>
+                    <span className="flex-1 text-center text-sm font-mono font-semibold text-foreground tabular-nums">{durationMins}</span>
+                    <button
+                      onClick={() => { const v = durationMins + 1; setDurationMins(v); update("callDuration", formatDuration(v, durationSecs)); }}
+                      className="px-2.5 py-2 text-muted-foreground hover:bg-muted/60 transition text-base font-bold select-none">+</button>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground">mins</span>
+                </div>
+                <span className="text-muted-foreground font-bold pb-4">:</span>
+                <div className="flex-1 flex flex-col items-center gap-1">
+                  <div className="flex items-center w-full border border-border rounded-lg overflow-hidden bg-background">
+                    <button
+                      onClick={() => { const v = Math.max(0, durationSecs - 1); setDurationSecs(v); update("callDuration", formatDuration(durationMins, v)); }}
+                      className="px-2.5 py-2 text-muted-foreground hover:bg-muted/60 transition text-base font-bold select-none">−</button>
+                    <span className="flex-1 text-center text-sm font-mono font-semibold text-foreground tabular-nums">{durationSecs}</span>
+                    <button
+                      onClick={() => { const v = Math.min(59, durationSecs + 1); setDurationSecs(v); update("callDuration", formatDuration(durationMins, v)); }}
+                      className="px-2.5 py-2 text-muted-foreground hover:bg-muted/60 transition text-base font-bold select-none">+</button>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground">secs</span>
+                </div>
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-1.5 text-center">
+                Will show as: <strong className="text-foreground">{formatDuration(durationMins, durationSecs)}</strong>
+              </p>
             </div>
             <div className="grid grid-cols-5 gap-1">
               {COUNTRIES.map(c => (
