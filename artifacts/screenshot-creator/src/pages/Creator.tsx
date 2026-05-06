@@ -22,7 +22,7 @@ const defaultConfig: ScreenshotConfig = {
   callDate: "Today",
   callTime: "15:14",
   callDuration: "14 seconds",
-  callType: "incoming",
+  callType: "outgoing",
   batteryLevel: 86,
   batteryCharging: false,
   networkBars: 4,
